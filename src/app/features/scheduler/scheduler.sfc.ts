@@ -19,7 +19,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [CommonModule, IonicModule, RouterModule.forChild(routes)],
-  declarations: [SchedulerSFC],
-  exports: [SchedulerSFC],
+  declarations: [SchedulerSFC]
 })
 export class SchedulerModule {}
