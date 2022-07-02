@@ -1,0 +1,7 @@
+{
+  "name": "snapADDY",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
