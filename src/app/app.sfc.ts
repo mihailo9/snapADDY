@@ -4,9 +4,12 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { MbscModule } from '@mobiscroll/angular';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouteReuseStrategy } from '@angular/router';
-
-import { AppRoutingModule } from './app-routing.module';
+import {
+  RouteReuseStrategy,
+  PreloadAllModules,
+  RouterModule,
+  Routes,
+} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +21,21 @@ import { AppRoutingModule } from './app-routing.module';
 })
 export class AppSFC {}
 
+const routes: Routes = [
+  {
+    path: 'scheduler',
+    loadChildren: () =>
+      import('./features/scheduler/scheduler.sfc').then(
+        (m) => m.SchedulerModule
+      ),
+  },
+  {
+    path: '',
+    redirectTo: 'scheduler',
+    pathMatch: 'full',
+  },
+];
+
 @NgModule({
   declarations: [AppSFC],
   imports: [
@@ -25,7 +43,7 @@ export class AppSFC {}
     MbscModule,
     BrowserModule,
     IonicModule.forRoot(),
-    AppRoutingModule,
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppSFC],
