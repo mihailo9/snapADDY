@@ -18,7 +18,7 @@ import {
 import {
   RoomheaderItemSFC,
   DayheaderItemSFC,
-} from './scheduler-header-templates/index';
+} from '@features/scheduler/scheduler-header-templates/index';
 
 setOptions({
   theme: 'ios',
