@@ -1,9 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { formatDate } from '@mobiscroll/angular';
 
 @Component({
   standalone: true,
   selector: 'app-day-header-item',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="header-template-container">
       <div class="header-template-date">

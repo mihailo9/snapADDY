@@ -1,4 +1,4 @@
-import { Component, NgModule, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, NgModule, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule, Routes } from '@angular/router';
@@ -29,6 +29,7 @@ setOptions({
 
 @Component({
   selector: 'app-scheduler',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-container *ngIf="store?.vm$ | async as vm">
     <mbsc-eventcalendar
       [view]="vm?.view"

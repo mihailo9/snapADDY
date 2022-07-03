@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { MbscModule } from '@mobiscroll/angular';
@@ -16,6 +16,7 @@ import { SchedulerSFC } from '@core/features/scheduler/scheduler.sfc';
 
 @Component({
   selector: 'app-root',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <ion-app *ngIf="vm$ | async as vm">
       <ion-router-outlet
