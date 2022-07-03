@@ -76,27 +76,7 @@ export class SchedulerSFC implements OnInit {
 
   constructor(private readonly fromInjector: FromInjector) {}
 
-  ngOnInit(): void {
-    // this.appStore.vm$.subscribe(a => {
-    //   console.log(a)
-    // })
-    // this.schedulerStore.buildEvents().subscribe((a) => {
-    //   console.log(a);
-    //   this.myEvents = a;
-    // });
-    // this.http
-    //   .jsonp<MbscCalendarEvent[]>(
-    //     'https://trial.mobiscroll.com/resource-events/',
-    //     'callback'
-    //   )
-    //   .subscribe((resp) => {
-    //     console.log(resp);
-    //     this.myEvents = resp;
-    //   });
-    this.store.vm$.subscribe((c) => {
-      console.log(c);
-    });
-  }
+  ngOnInit(): void {}
 }
 
 const routes: Routes = [
