@@ -1,10 +1,4 @@
-class Room {
-  constructor(
-    private id: number,
-    private name: string,
-    private numberOfPeople: number
-  ) {}
-}
+import { Room } from '@models/index';
 
 export const rooms: Room[] = [
   new Room(1, 'Room A', 6),

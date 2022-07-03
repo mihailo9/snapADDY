@@ -1,6 +1,4 @@
-class User {
-  constructor(private id: number, private name: string) {}
-}
+import { User } from '@models/index';
 
 export const users: User[] = [
   new User(1, 'Sebastian'),

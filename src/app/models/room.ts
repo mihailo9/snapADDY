@@ -1,5 +1,7 @@
-export interface Room {
-  id: number;
-  name: string;
-  numberOfPeople: number;
+export class Room {
+  constructor(
+     public id: number,
+     public name: string,
+     public numberOfPeople: number
+  ) {}
 }

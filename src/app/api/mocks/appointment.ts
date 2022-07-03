@@ -1,15 +1,4 @@
-import * as day from 'dayjs';
-
-class Appointment {
-  constructor(
-    private id: number,
-    private title: string,
-    private roomId: number,
-    private startDate: string,
-    private endDate: string,
-    private userId: number
-  ) {}
-}
+import { Appointment } from '@models/index';
 
 export const appointments = [
   new Appointment(
