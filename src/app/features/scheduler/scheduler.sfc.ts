@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, NgModule, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  NgModule,
+  OnInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule, Routes } from '@angular/router';
@@ -54,29 +59,6 @@ setOptions({
 export class SchedulerSFC implements OnInit {
   store = this.fromInjector.get(SchedulerStore);
 
-  myEvents: MbscCalendarEvent[] = [];
-
-  myResources: MbscResource[] = [
-    {
-      id: 1,
-      name: 'Ryan',
-      color: '#f7c4b4',
-      img: 'https://img.mobiscroll.com/demos/m1.png',
-    },
-    {
-      id: 2,
-      name: 'Kate',
-      color: '#c6f1c9',
-      img: 'https://img.mobiscroll.com/demos/f1.png',
-    },
-    {
-      id: 3,
-      name: 'John',
-      color: '#e8d0ef',
-      img: 'https://img.mobiscroll.com/demos/m2.png',
-    },
-  ];
-
   constructor(private readonly fromInjector: FromInjector) {}
 
   ngOnInit(): void {}
@@ -97,7 +79,7 @@ const routes: Routes = [
     MbscModule,
     RoomheaderItemSFC,
     DayheaderItemSFC,
-    SchedulerPopupSFC
+    SchedulerPopupSFC,
   ],
   declarations: [SchedulerSFC],
 })
