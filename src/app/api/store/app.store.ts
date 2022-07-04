@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/member-ordering */
 
 import { Injectable } from '@angular/core';
-import { MbscCalendarEvent } from '@mobiscroll/angular';
 import { forkJoin, Observable } from 'rxjs';
 import { Room, User, Appointment } from '@models/index';
 import {
@@ -13,6 +12,7 @@ import {
 import { Store } from '@core/base/store.base';
 import { FromInjector } from '@core/util/from-injector';
 import { take } from 'rxjs/operators';
+import { LocalstorageService } from '@core/util/localstorage.service';
 
 export interface State {
   users: User[];
@@ -43,7 +43,10 @@ export class AppStore extends Store<State> {
 
   vm$: Observable<State> = this.initVM();
 
-  constructor(protected readonly fromInjector: FromInjector) {
+  constructor(
+    protected readonly fromInjector: FromInjector,
+    protected readonly localstorageService: LocalstorageService
+  ) {
     super(fromInjector);
   }
 
@@ -67,12 +70,17 @@ export class AppStore extends Store<State> {
   }
 
   protected initVM() {
-    const projector = (loading, appointments, users, rooms) => ({
-      loading,
-      appointments,
-      users,
-      rooms,
-    });
+    const projector = (loading, appointments, users, rooms) => {
+      const state = {
+        loading,
+        appointments,
+        users,
+        rooms,
+      };
+      this.localstorageService.setData(state, 'appState');
+
+      return state;
+    };
 
     const props = [this.loading$, this.appointments$, this.users$, this.rooms$];
 

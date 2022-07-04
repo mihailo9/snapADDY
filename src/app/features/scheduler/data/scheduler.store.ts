@@ -12,6 +12,7 @@ import { Appointment, Room } from '@models/index';
 
 import { Store } from '@core/base/store.base';
 import { FromInjector } from '@core/util/from-injector';
+import { LocalstorageService } from '@core/util/localstorage.service';
 
 export interface State {
   events: MbscCalendarEvent[];
@@ -42,7 +43,10 @@ export class SchedulerStore extends Store<State> {
 
   vm$: Observable<State> = this.initVM();
 
-  constructor(protected readonly fromInjector: FromInjector) {
+  constructor(
+    protected readonly fromInjector: FromInjector,
+    protected readonly localstorageService: LocalstorageService
+  ) {
     super(fromInjector);
   }
 
@@ -59,12 +63,17 @@ export class SchedulerStore extends Store<State> {
   }
 
   protected initVM(): Observable<State> {
-    const projector = (events, resources, view, loading) => ({
-      events,
-      resources,
-      view,
-      loading,
-    });
+    const projector = (events, resources, view, loading) => {
+      const state = {
+        events,
+        resources,
+        view,
+        loading,
+      };
+      this.localstorageService.setData(state, 'schedulerStore');
+
+      return state;
+    };
 
     const props = [this.events$, this.resources$, this.view$, this.loading$];
 

@@ -60,9 +60,11 @@ setOptions({
         <app-day-header-item [day]="day"></app-day-header-item>
       </ng-template>
     </mbsc-eventcalendar>
+
     <app-scheduler-event-popup
       [events]="vm?.events"
     ></app-scheduler-event-popup>
+
     <app-scheduler-color-popup></app-scheduler-color-popup>
   </ng-container>`,
 })
