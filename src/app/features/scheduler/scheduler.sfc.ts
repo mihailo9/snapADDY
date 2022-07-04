@@ -3,6 +3,7 @@ import {
   Component,
   NgModule,
   OnInit,
+  ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
@@ -39,6 +40,7 @@ setOptions({
 @Component({
   selector: 'app-scheduler',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   template: `<ng-container *ngIf="store?.vm$ | async as vm">
     <mbsc-eventcalendar
       [view]="vm?.view"

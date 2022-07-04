@@ -4,6 +4,7 @@ import {
   Component,
   OnInit,
   ViewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SchedulerPopupColorService } from '@core/features/scheduler/services/scheduler-popup-color.service';
@@ -14,6 +15,7 @@ import { MbscModule } from '@mobiscroll/angular';
   selector: 'app-scheduler-color-popup',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   template: `
     <mbsc-popup
       [options]="schedulerPopupColorService.colorOptions"

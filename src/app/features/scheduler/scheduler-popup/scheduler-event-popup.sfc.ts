@@ -6,6 +6,7 @@ import {
   Input,
   OnInit,
   ViewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SchedulerPopupFormDeleteBtnSFC } from '@core/features/scheduler/scheduler-popup/scheduler-popup-form/scheduler-popup-form-delete-btn.sfc';
@@ -28,6 +29,7 @@ import {
   selector: 'app-scheduler-event-popup',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   template: `
     <mbsc-popup
       [options]="schedulerPopupOptionsService?.popupOptions"

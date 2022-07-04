@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SchedulerPopupDatepickerService } from '@core/features/scheduler/services/scheduler-popup-datepicker.service';
 import { SchedulerPopupFormService } from '@core/features/scheduler/services/scheduler-popup-form.service';
@@ -9,6 +9,7 @@ import { MbscModule } from '@mobiscroll/angular';
   selector: 'app-scheduler-popup-form-date',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   template: ` <div class="mbsc-form-group">
     <mbsc-datepicker
       [(ngModel)]="schedulerPopupFormService.popupEventDates"

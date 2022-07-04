@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SchedulerPopupFormService } from '@core/features/scheduler/services/scheduler-popup-form.service';
 import { FromInjector } from '@core/util/from-injector';
@@ -8,6 +8,7 @@ import { MbscModule } from '@mobiscroll/angular';
   selector: 'app-scheduler-popup-form-title',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   template: ` <div class="mbsc-form-group">
     <mbsc-input
       label="Title"

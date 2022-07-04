@@ -3,6 +3,7 @@ import {
   Component,
   EventEmitter,
   Output,
+  ViewEncapsulation,
 } from '@angular/core';
 import { MbscModule } from '@mobiscroll/angular';
 
@@ -10,6 +11,7 @@ import { MbscModule } from '@mobiscroll/angular';
   selector: 'app-scheduler-popup-form-delete-btn',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   template: ` <mbsc-button
     class="mbsc-button-block"
     color="danger"
