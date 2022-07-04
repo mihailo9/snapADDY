@@ -21,7 +21,10 @@ import {
 } from '@features/scheduler/scheduler-header-templates/index';
 import { SchedulerStore } from '@core/features/scheduler/data/scheduler.store';
 import { FromInjector } from '@core/util/from-injector';
-import { SchedulerPopupSFC } from '@core/features/scheduler/scheduler-popup/scheduler-popup.sfc';
+import { SchedulerEventPopupSFC } from '@core/features/scheduler/scheduler-popup/scheduler-event-popup.sfc';
+import { SchedulerOptionsService } from '@core/features/scheduler/services/scheduler-options.service';
+import { SchedulerPopupFormService } from '@core/features/scheduler/services/scheduler-popup-form.service';
+import { SchedulerColorPopupSFC } from '@core/features/scheduler/scheduler-popup/scheduler-color-popup.sfc';
 
 setOptions({
   theme: 'ios',
@@ -44,6 +47,8 @@ setOptions({
       [resources]="vm?.resources"
       [resourceTemplate]="resourceTemp"
       [dayTemplate]="dayTemp"
+      [options]="schedulerOptionsService?.calendarOptions"
+      [(selectedDate)]="schedulerPopupFormService.calendarSelectedDate"
     >
       <ng-template #resourceTemp let-room>
         <app-room-header-item [room]="room"></app-room-header-item>
@@ -53,11 +58,20 @@ setOptions({
         <app-day-header-item [day]="day"></app-day-header-item>
       </ng-template>
     </mbsc-eventcalendar>
-    <app-scheduler-popup></app-scheduler-popup>
+    <app-scheduler-event-popup [events]="vm?.events"></app-scheduler-event-popup>
+    <app-scheduler-color-popup></app-scheduler-color-popup>
   </ng-container>`,
 })
 export class SchedulerSFC implements OnInit {
   store = this.fromInjector.get(SchedulerStore);
+
+  protected readonly schedulerOptionsService = this.fromInjector.get(
+    SchedulerOptionsService
+  );
+
+  protected readonly schedulerPopupFormService = this.fromInjector.get(
+    SchedulerPopupFormService
+  );
 
   constructor(private readonly fromInjector: FromInjector) {}
 
@@ -79,7 +93,8 @@ const routes: Routes = [
     MbscModule,
     RoomheaderItemSFC,
     DayheaderItemSFC,
-    SchedulerPopupSFC,
+    SchedulerEventPopupSFC,
+    SchedulerColorPopupSFC
   ],
   declarations: [SchedulerSFC],
 })
