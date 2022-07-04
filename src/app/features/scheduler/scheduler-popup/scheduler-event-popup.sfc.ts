@@ -14,7 +14,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   SchedulerPopupFormDeleteBtnSFC,
   SchedulerPopupFormSFC,
-} from '@core/features/scheduler/scheduler-popup/scheduler-popup-form/index';
+} from '@core/features/scheduler/scheduler-popup/scheduler-popup-form';
 
 import {
   SchedulerPopupOptionsService,
@@ -23,7 +23,7 @@ import {
   SchedulerPopupColorService,
   SchedulerPopupDatepickerService,
   SchedulerPopupFormService,
-} from '@core/features/scheduler/services/index';
+} from '@core/features/scheduler/services';
 
 import { FromInjector } from '@core/util/from-injector';
 import {
@@ -109,6 +109,15 @@ export class SchedulerEventPopupSFC implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.schedulerPopupOptionsService.popupClose$.subscribe((evt) => {
+      console.log(evt);
+      if (!this.isEdit) {
+        // refresh the list, if add popup was canceled, to remove the temporary event
+        // this.events = [...this.events];
+        this.updateEvents$.emit(this.events);
+      }
+    });
+
     this.schedulerOptionsService.eventClick$.subscribe((evt) => {
       console.log(evt);
       this.isEdit = true;
@@ -156,14 +165,7 @@ export class SchedulerEventPopupSFC implements OnInit {
       this.saveEvent();
     });
 
-    this.schedulerPopupOptionsService.popupClose$.subscribe((evt) => {
-      console.log(evt);
-      if (!this.isEdit) {
-        // refresh the list, if add popup was canceled, to remove the temporary event
-        // this.events = [...this.events];
-        this.updateEvents$.emit(this.events);
-      }
-    });
+
   }
 
   loadPopupForm({ title, start, end, color }: MbscCalendarEvent): void {

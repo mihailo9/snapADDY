@@ -8,7 +8,7 @@ import {
   SchedulerPopupFormColorPickerSFC,
   SchedulerPopupFormDateSFC,
   SchedulerPopupFormTitleSFC,
-} from '@core/features/scheduler/scheduler-popup/scheduler-popup-form/index';
+} from '@core/features/scheduler/scheduler-popup/scheduler-popup-form';
 
 @Component({
   selector: 'app-scheduler-popup-form',

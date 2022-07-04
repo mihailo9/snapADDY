@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,40 +9,32 @@ import {
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule, Routes } from '@angular/router';
-import { MbscModule } from '@mobiscroll/angular';
-
-import { setOptions } from '@mobiscroll/angular';
-
+import { MbscCalendarEvent, MbscModule } from '@mobiscroll/angular';
 import {
   RoomheaderItemSFC,
   DayheaderItemSFC,
-} from '@features/scheduler/scheduler-header-templates/index';
-import { SchedulerStore } from '@core/features/scheduler/data/scheduler.store';
+} from '@features/scheduler/scheduler-header-templates';
+import { SchedulerStore } from '@core/features/scheduler/store/scheduler.store';
 import { FromInjector } from '@core/util/from-injector';
 import {
   SchedulerEventPopupSFC,
   SchedulerColorPopupSFC,
-} from '@core/features/scheduler/scheduler-popup/index';
+} from '@core/features/scheduler/scheduler-popup';
 import {
   SchedulerOptionsService,
   SchedulerPopupFormService,
-} from '@core/features/scheduler/services/index';
-
-setOptions({
-  theme: 'ios',
-  themeVariant: 'light',
-  clickToCreate: true,
-  dragToCreate: true,
-  dragToMove: true,
-  dragToResize: true,
-  eventDelete: true,
-});
+} from '@core/features/scheduler/services';
+import { AppStore } from '@core/api/store';
+import { map } from 'rxjs/operators';
+import { mapAppointmentsToEvents } from '@core/util/map-appointments-to-events';
+import { combineLatest } from 'rxjs';
+import { mapEventToAppointment } from '@core/util/map-event-to-appointment';
 
 @Component({
   selector: 'app-scheduler',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: `<ng-container *ngIf="store?.vm$ | async as vm">
+  template: `<ng-container *ngIf="combinedStoresVM | async as vm">
     <mbsc-eventcalendar
       [view]="vm?.view"
       [data]="vm?.events"
@@ -63,13 +56,26 @@ setOptions({
 
     <app-scheduler-event-popup
       [events]="vm?.events"
+      (updateEvents$)="updateAppointments($event)"
     ></app-scheduler-event-popup>
 
     <app-scheduler-color-popup></app-scheduler-color-popup>
   </ng-container>`,
 })
 export class SchedulerSFC implements OnInit {
+  appStore = this.fromInjector.get(AppStore);
+
   store = this.fromInjector.get(SchedulerStore);
+
+  combinedStoresVM = combineLatest([
+    this.store.vm$,
+    this.appStore.appointments$,
+  ]).pipe(
+    map(([schedulerVM, appointments]) => ({
+      ...schedulerVM,
+      events: mapAppointmentsToEvents(appointments),
+    }))
+  );
 
   protected readonly schedulerOptionsService = this.fromInjector.get(
     SchedulerOptionsService
@@ -80,6 +86,11 @@ export class SchedulerSFC implements OnInit {
   );
 
   constructor(private readonly fromInjector: FromInjector) {}
+
+  protected updateAppointments(events: MbscCalendarEvent[]) {
+    const appointments = events.map((evt) => mapEventToAppointment(evt));
+    this.appStore.updateAppointments(appointments);
+  }
 
   ngOnInit(): void {}
 }

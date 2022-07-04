@@ -4,7 +4,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { SchedulerPopupFormService } from '@core/features/scheduler/services/index';
+import { SchedulerPopupFormService } from '@core/features/scheduler/services';
 import { FromInjector } from '@core/util/from-injector';
 import { MbscModule } from '@mobiscroll/angular';
 

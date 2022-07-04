@@ -69,6 +69,10 @@ export class AppStore extends Store<State> {
       });
   }
 
+  updateAppointments(appointments: Appointment[]) {
+    this.updateStateProp('appointments', appointments);
+  }
+
   protected initVM() {
     const projector = (loading, appointments, users, rooms) => {
       const state = {

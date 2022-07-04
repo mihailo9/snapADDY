@@ -13,6 +13,8 @@ import { Appointment, Room } from '@models/index';
 import { Store } from '@core/base/store.base';
 import { FromInjector } from '@core/util/from-injector';
 import { LocalstorageService } from '@core/util/localstorage.service';
+import { mapAppointmentsToEvents } from '@core/util/map-appointments-to-events';
+import { mapRoomsToResources } from '@core/util/map-rooms-to-resources';
 
 export interface State {
   events: MbscCalendarEvent[];
@@ -51,18 +53,17 @@ export class SchedulerStore extends Store<State> {
   }
 
   updateEvents(events: MbscCalendarEvent[]) {
-    console.log(events);
     this.updateStateProp('events', events);
   }
 
   updateResurcesFromRooms(rooms: Room[]) {
-    const resources = this.mapToResources(rooms);
+    const resources = mapRoomsToResources(rooms);
 
     this.updateStateProp('resources', resources);
   }
 
   updateEventsFromAppointments(appointments: Appointment[]) {
-    const events = this.mapToEvents(appointments);
+    const events = mapAppointmentsToEvents(appointments);
 
     this.updateStateProp('events', events);
   }
@@ -83,25 +84,6 @@ export class SchedulerStore extends Store<State> {
     const props = [this.events$, this.resources$, this.view$, this.loading$];
 
     return this.setupVM(projector, props);
-  }
-
-  private mapToResources(rooms: Room[]): MbscResource[] {
-    return rooms.map(({ id, name, numberOfPeople }) => ({
-      id,
-      name,
-      color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
-    }));
-  }
-
-  private mapToEvents(appointments: Appointment[]): MbscCalendarEvent[] {
-    return appointments.map((appointment) => ({
-      start: appointment.startDate,
-      end: appointment.endDate,
-      id: appointment.id,
-      title: appointment.title,
-      resource: appointment.roomId,
-      organiserId: appointment.userId,
-    }));
   }
 
   private setupSchedulerView(): MbscEventcalendarView {

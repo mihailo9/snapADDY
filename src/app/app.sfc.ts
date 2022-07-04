@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { MbscModule } from '@mobiscroll/angular';
@@ -38,7 +43,6 @@ export class AppSFC implements OnInit {
   }
 
   onOutletLoaded(component: SchedulerSFC, view: State) {
-    component.store.updateEventsFromAppointments(view.appointments);
     component.store.updateResurcesFromRooms(view.rooms);
   }
 }

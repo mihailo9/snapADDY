@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import {
   SchedulerPopupDatepickerService,
   SchedulerPopupFormService,
-} from '@core/features/scheduler/services/index';
+} from '@core/features/scheduler/services';
 
 import { FromInjector } from '@core/util/from-injector';
 import { MbscModule } from '@mobiscroll/angular';

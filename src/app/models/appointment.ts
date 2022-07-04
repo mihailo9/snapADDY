@@ -1,6 +1,6 @@
 export class Appointment {
   constructor(
-    public id: number,
+    public id: number | string,
     public title: string,
     public roomId: number,
     public startDate: string,

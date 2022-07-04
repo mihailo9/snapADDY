@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { SchedulerPopupColorService } from '@core/features/scheduler/services/index';
+import { SchedulerPopupColorService } from '@core/features/scheduler/services';
 import { FromInjector } from '@core/util/from-injector';
 import { MbscModule } from '@mobiscroll/angular';
 
