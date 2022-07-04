@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable max-len */
 import { CommonModule } from '@angular/common';
 import {
@@ -21,13 +22,18 @@ import {
   SchedulerOptionsService,
   SchedulerPopupButtonsService,
   SchedulerPopupColorService,
-  SchedulerPopupDatepickerService,
   SchedulerPopupFormService,
 } from '@core/features/scheduler/services';
+import {
+  DispatchEventType,
+  IDispatchedEvent,
+} from '@core/models/IDispatchedEvent';
 
 import { FromInjector } from '@core/util/from-injector';
 import {
   MbscCalendarEvent,
+  MbscEventClickEvent,
+  MbscEventCreatedEvent,
   MbscModule,
   MbscPopup,
   Notifications,
@@ -70,6 +76,32 @@ export class SchedulerEventPopupSFC implements OnInit {
 
   @Input() events: MbscCalendarEvent[];
 
+  @Input() set dispatchedEvent(payload: IDispatchedEvent) {
+    if (payload) {
+      switch (payload.type) {
+        case DispatchEventType.click:
+          this.onEventClick(payload.event as MbscEventClickEvent);
+          break;
+        case DispatchEventType.created:
+          console.log(payload);
+          this.onEventCreated(payload.event as MbscEventCreatedEvent);
+          break;
+        case DispatchEventType.deleted:
+          this.deleteEvent(payload.event);
+          break;
+        case DispatchEventType.update:
+        case DispatchEventType.create:
+          console.log(payload.event);
+          break;
+        case DispatchEventType.updated:
+          break;
+
+        default:
+          break;
+      }
+    }
+  }
+
   @Output() readonly updateEvents$: EventEmitter<MbscCalendarEvent[]> =
     new EventEmitter();
 
@@ -91,10 +123,6 @@ export class SchedulerEventPopupSFC implements OnInit {
     SchedulerPopupColorService
   );
 
-  protected readonly schedulerPopupDatepickerService = this.fromInjector.get(
-    SchedulerPopupDatepickerService
-  );
-
   protected readonly schedulerPopupFormService = this.fromInjector.get(
     SchedulerPopupFormService
   );
@@ -108,65 +136,24 @@ export class SchedulerEventPopupSFC implements OnInit {
     private readonly fromInjector: FromInjector
   ) {}
 
-  ngOnInit(): void {
-    this.schedulerPopupOptionsService.popupClose$.subscribe((evt) => {
-      console.log(evt);
-      if (!this.isEdit) {
-        // refresh the list, if add popup was canceled, to remove the temporary event
-        // this.events = [...this.events];
-        this.updateEvents$.emit(this.events);
-      }
-    });
+  ngOnInit() {}
 
-    this.schedulerOptionsService.eventClick$.subscribe((evt) => {
-      console.log(evt);
-      this.isEdit = true;
-      this.tempEvent = evt.event;
-      //   // fill popup form with event data
-      this.loadPopupForm(evt.event);
-      //   // set popup options
-      this.popupHeaderText = 'Edit event';
-      this.schedulerPopupButtonsService.setPopupButtons(
-        this.schedulerPopupButtonsService.getPopupEditButtons()
-      );
-      //   this.popupButtons = this.popupEditButtons;
-      this.popupAnchor = evt.domEvent.currentTarget;
-      //   // open the popup
-      this.popup.open();
-    });
+  // ngOnInit(): void {
+  //   this.schedulerPopupOptionsService.popupClose$.subscribe((evt) => {
+  //     console.log(evt);
+  //     if (!this.isEdit) {
+  //       // refresh the list, if add popup was canceled, to remove the temporary event
+  //       // this.events = [...this.events];
+  //       this.updateEvents$.emit(this.events);
+  //     }
+  //   });
 
-    this.schedulerOptionsService.eventCreated$.subscribe((evt) => {
-      console.log(evt);
-      this.isEdit = false;
-      this.tempEvent = evt.event;
-      // // fill popup form with event data
-      this.loadPopupForm(evt.event);
-      // // set popup options
-      this.popupHeaderText = 'New Event';
-      this.schedulerPopupButtonsService.setPopupButtons(
-        this.schedulerPopupButtonsService.getPopupAddButtons()
-      );
-      this.popupAnchor = evt.target;
-      // // open the popup
-      this.popup.open();
-    });
+  //   this.schedulerPopupButtonsService.buttonClick$.subscribe((evt) => {
+  //     console.log(evt);
+  //     this.saveEvent();
+  //   });
 
-    this.schedulerOptionsService.eventDeleted$.subscribe((evt) => {
-      console.log(evt);
-      this.deleteEvent(evt.event);
-    });
-
-    this.schedulerOptionsService.eventUpdated$.subscribe((evt) => {
-      console.log(evt);
-    });
-
-    this.schedulerPopupButtonsService.buttonClick$.subscribe((evt) => {
-      console.log(evt);
-      this.saveEvent();
-    });
-
-
-  }
+  // }
 
   loadPopupForm({ title, start, end, color }: MbscCalendarEvent): void {
     this.schedulerPopupFormService.popupEventTitle = title;
@@ -216,5 +203,36 @@ export class SchedulerEventPopupSFC implements OnInit {
   onDeleteClick(): void {
     this.deleteEvent(this.tempEvent);
     this.popup.close();
+  }
+
+  private onEventClick(evt: MbscEventClickEvent) {
+    this.isEdit = true;
+    this.tempEvent = evt.event;
+    //   // fill popup form with event data
+    this.loadPopupForm(evt.event);
+    //   // set popup options
+    this.popupHeaderText = 'Edit event';
+    this.schedulerPopupButtonsService.setPopupButtons(
+      this.schedulerPopupButtonsService.getPopupEditButtons()
+    );
+    //   this.popupButtons = this.popupEditButtons;
+    this.popupAnchor = evt.domEvent.currentTarget;
+    //   // open the popup
+    this.popup.open();
+  }
+
+  private onEventCreated(evt: MbscEventCreatedEvent) {
+    this.isEdit = false;
+    this.tempEvent = evt;
+    // // fill popup form with event data
+    this.loadPopupForm(evt.event);
+    // // set popup options
+    this.popupHeaderText = 'New Event';
+    this.schedulerPopupButtonsService.setPopupButtons(
+      this.schedulerPopupButtonsService.getPopupAddButtons()
+    );
+    this.popupAnchor = evt.target;
+    // // open the popup
+    this.popup.open();
   }
 }

@@ -3,7 +3,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   NgModule,
-  OnInit,
   ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -29,6 +28,7 @@ import { map } from 'rxjs/operators';
 import { mapAppointmentsToEvents } from '@core/util/map-appointments-to-events';
 import { combineLatest } from 'rxjs';
 import { mapEventToAppointment } from '@core/util/map-event-to-appointment';
+import { DispatchEventType } from '@core/models/IDispatchedEvent';
 
 @Component({
   selector: 'app-scheduler',
@@ -56,13 +56,14 @@ import { mapEventToAppointment } from '@core/util/map-event-to-appointment';
 
     <app-scheduler-event-popup
       [events]="vm?.events"
+      [dispatchedEvent]="schedulerOptionsService.dispatch$ | async"
       (updateEvents$)="updateAppointments($event)"
     ></app-scheduler-event-popup>
 
     <app-scheduler-color-popup></app-scheduler-color-popup>
   </ng-container>`,
 })
-export class SchedulerSFC implements OnInit {
+export class SchedulerSFC {
   appStore = this.fromInjector.get(AppStore);
 
   store = this.fromInjector.get(SchedulerStore);
@@ -76,6 +77,8 @@ export class SchedulerSFC implements OnInit {
       events: mapAppointmentsToEvents(appointments),
     }))
   );
+
+  protected readonly dispatchEventTypeEnum = DispatchEventType;
 
   protected readonly schedulerOptionsService = this.fromInjector.get(
     SchedulerOptionsService
@@ -91,8 +94,6 @@ export class SchedulerSFC implements OnInit {
     const appointments = events.map((evt) => mapEventToAppointment(evt));
     this.appStore.updateAppointments(appointments);
   }
-
-  ngOnInit(): void {}
 }
 
 const routes: Routes = [

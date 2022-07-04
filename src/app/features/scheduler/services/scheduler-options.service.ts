@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/member-ordering */
 import { Injectable } from '@angular/core';
+import { DispatchEventType, IDispatchedEvent } from '@core/models';
 import {
   MbscEventcalendarOptions,
   MbscEventClickEvent,
@@ -9,7 +10,7 @@ import {
   MbscEventUpdatedEvent,
   MbscEventUpdateEvent,
 } from '@mobiscroll/angular';
-import { Subject } from 'rxjs';
+import { merge, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -39,6 +40,19 @@ export class SchedulerOptionsService {
 
   readonly eventUpdate$ = this.eventUpdate.asObservable();
 
+  readonly mergedEvents$ = merge(
+    this.eventClick$,
+    this.eventCreate$,
+    this.eventCreated$,
+    this.eventDeleted$,
+    this.eventUpdate$,
+    this.eventUpdated$
+  );
+
+  private readonly dispatch: Subject<IDispatchedEvent> = new Subject();
+
+  readonly dispatch$ = this.dispatch.asObservable();
+
   calendarOptions: MbscEventcalendarOptions = {
     clickToCreate: 'double',
     dragToCreate: true,
@@ -48,34 +62,56 @@ export class SchedulerOptionsService {
       schedule: { type: 'week' },
     },
     onEventClick: (args) => {
-      this.eventClick.next(args);
+      this.eventDispatched({
+        type: DispatchEventType.click,
+        event: args,
+      });
     },
     onEventCreated: (args) => {
       setTimeout(() => {
-        this.eventCreated.next(args);
+        this.eventDispatched({
+          type: DispatchEventType.created,
+          event: args,
+        });
       });
     },
     onEventDeleted: (args) => {
       setTimeout(() => {
-        this.eventDeleted.next(args);
+        this.eventDispatched({
+          type: DispatchEventType.deleted,
+          event: args,
+        });
       });
     },
     onEventUpdated: (args) => {
-      this.eventUpdated.next(args);
+      this.eventDispatched({
+        type: DispatchEventType.updated,
+        event: args,
+      });
     },
     onEventCreate: (args, inst) => {
       if (this.hasOverlap(args, inst)) {
         return false;
       }
-      this.eventCreate.next(args);
+      this.eventDispatched({
+        type: DispatchEventType.create,
+        event: args,
+      });
     },
     onEventUpdate: (args, inst) => {
       if (this.hasOverlap(args, inst)) {
         return false;
       }
-      this.eventUpdate.next(args);
+      this.eventDispatched({
+        type: DispatchEventType.update,
+        event: args,
+      });
     },
   };
+
+  eventDispatched(event: IDispatchedEvent) {
+    this.dispatch.next(event);
+  }
 
   private hasOverlap(args, inst) {
     const ev = args.event;
