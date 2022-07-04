@@ -16,6 +16,7 @@ import {
 } from '@features/scheduler/scheduler-header-templates/index';
 import { SchedulerStore } from '@core/features/scheduler/data/scheduler.store';
 import { FromInjector } from '@core/util/from-injector';
+import { SchedulerPopupSFC } from '@core/features/scheduler/scheduler-popup/scheduler-popup.sfc';
 
 setOptions({
   theme: 'ios',
@@ -47,6 +48,7 @@ setOptions({
         <app-day-header-item [day]="day"></app-day-header-item>
       </ng-template>
     </mbsc-eventcalendar>
+    <app-scheduler-popup></app-scheduler-popup>
   </ng-container>`,
 })
 export class SchedulerSFC implements OnInit {
@@ -95,6 +97,7 @@ const routes: Routes = [
     MbscModule,
     RoomheaderItemSFC,
     DayheaderItemSFC,
+    SchedulerPopupSFC
   ],
   declarations: [SchedulerSFC],
 })
