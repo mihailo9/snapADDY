@@ -50,13 +50,18 @@ export class SchedulerStore extends Store<State> {
     super(fromInjector);
   }
 
-  updateResurces(rooms: Room[]) {
+  updateEvents(events: MbscCalendarEvent[]) {
+    console.log(events);
+    this.updateStateProp('events', events);
+  }
+
+  updateResurcesFromRooms(rooms: Room[]) {
     const resources = this.mapToResources(rooms);
 
     this.updateStateProp('resources', resources);
   }
 
-  updateEvents(appointments: Appointment[]) {
+  updateEventsFromAppointments(appointments: Appointment[]) {
     const events = this.mapToEvents(appointments);
 
     this.updateStateProp('events', events);
@@ -95,6 +100,7 @@ export class SchedulerStore extends Store<State> {
       id: appointment.id,
       title: appointment.title,
       resource: appointment.roomId,
+      organiserId: appointment.userId,
     }));
   }
 

@@ -38,8 +38,8 @@ export class AppSFC implements OnInit {
   }
 
   onOutletLoaded(component: SchedulerSFC, view: State) {
-    component.store.updateEvents(view.appointments);
-    component.store.updateResurces(view.rooms);
+    component.store.updateEventsFromAppointments(view.appointments);
+    component.store.updateResurcesFromRooms(view.rooms);
   }
 }
 

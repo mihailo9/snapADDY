@@ -3,8 +3,10 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Input,
   OnInit,
+  Output,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
@@ -67,6 +69,9 @@ export class SchedulerEventPopupSFC implements OnInit {
   popup!: MbscPopup;
 
   @Input() events: MbscCalendarEvent[];
+
+  @Output() readonly updateEvents$: EventEmitter<MbscCalendarEvent[]> =
+    new EventEmitter();
 
   isEdit: boolean;
   tempEvent!: MbscCalendarEvent;
@@ -155,7 +160,8 @@ export class SchedulerEventPopupSFC implements OnInit {
       console.log(evt);
       if (!this.isEdit) {
         // refresh the list, if add popup was canceled, to remove the temporary event
-        this.events = [...this.events];
+        // this.events = [...this.events];
+        this.updateEvents$.emit(this.events);
       }
     });
   }
@@ -172,12 +178,14 @@ export class SchedulerEventPopupSFC implements OnInit {
     this.tempEvent.color = this.schedulerPopupColorService.selectedColor;
     if (this.isEdit) {
       // update the event in the list
-      this.events = [...this.events];
+      // this.events = [...this.events];
+      this.updateEvents$.emit(this.events);
       // here you can update the event in your storage as well
       // ...
     } else {
       // add the new event to the list
-      this.events = [...this.events, this.tempEvent];
+      // this.events = [...this.events, this.tempEvent];
+      this.updateEvents$.emit([...this.events, this.tempEvent]);
       // here you can add the event to your storage as well
       // ...
     }
@@ -193,7 +201,8 @@ export class SchedulerEventPopupSFC implements OnInit {
     this.notify.snackbar({
       button: {
         action: () => {
-          this.events = [...this.events, event];
+          // this.events = [...this.events, event];
+          this.updateEvents$.emit([...this.events, event]);
         },
         text: 'Undo',
       },
