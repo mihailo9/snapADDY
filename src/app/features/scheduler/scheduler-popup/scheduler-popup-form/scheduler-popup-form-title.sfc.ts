@@ -1,6 +1,10 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { SchedulerPopupFormService } from '@core/features/scheduler/services/scheduler-popup-form.service';
+import { SchedulerPopupFormService } from '@core/features/scheduler/services/index';
 import { FromInjector } from '@core/util/from-injector';
 import { MbscModule } from '@mobiscroll/angular';
 

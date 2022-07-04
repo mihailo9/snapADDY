@@ -9,14 +9,20 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SchedulerPopupFormDeleteBtnSFC } from '@core/features/scheduler/scheduler-popup/scheduler-popup-form/scheduler-popup-form-delete-btn.sfc';
-import { SchedulerPopupFormSFC } from '@core/features/scheduler/scheduler-popup/scheduler-popup-form/scheduler-popup-form.sfc';
-import { SchedulerOptionsService } from '@core/features/scheduler/services/scheduler-options.service';
-import { SchedulerPopupButtonsService } from '@core/features/scheduler/services/scheduler-popup-buttons.service';
-import { SchedulerPopupColorService } from '@core/features/scheduler/services/scheduler-popup-color.service';
-import { SchedulerPopupDatepickerService } from '@core/features/scheduler/services/scheduler-popup-datepicker.service';
-import { SchedulerPopupFormService } from '@core/features/scheduler/services/scheduler-popup-form.service';
-import { SchedulerPopupOptionsService } from '@core/features/scheduler/services/scheduler-popup-options.service';
+import {
+  SchedulerPopupFormDeleteBtnSFC,
+  SchedulerPopupFormSFC,
+} from '@core/features/scheduler/scheduler-popup/scheduler-popup-form/index';
+
+import {
+  SchedulerPopupOptionsService,
+  SchedulerOptionsService,
+  SchedulerPopupButtonsService,
+  SchedulerPopupColorService,
+  SchedulerPopupDatepickerService,
+  SchedulerPopupFormService,
+} from '@core/features/scheduler/services/index';
+
 import { FromInjector } from '@core/util/from-injector';
 import {
   MbscCalendarEvent,
@@ -154,12 +160,7 @@ export class SchedulerEventPopupSFC implements OnInit {
     });
   }
 
-  loadPopupForm({
-    title,
-    start,
-    end,
-    color,
-  }: MbscCalendarEvent): void {
+  loadPopupForm({ title, start, end, color }: MbscCalendarEvent): void {
     this.schedulerPopupFormService.popupEventTitle = title;
     this.schedulerPopupFormService.popupEventDates = [start, end];
     this.schedulerPopupColorService.selectedColor = color || '';

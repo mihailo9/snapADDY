@@ -1,8 +1,14 @@
 /* eslint-disable max-len */
-import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import { SchedulerPopupFormColorPickerSFC } from '@core/features/scheduler/scheduler-popup/scheduler-popup-form/scheduler-popup-form-color-picker.sfc';
-import { SchedulerPopupFormDateSFC } from '@core/features/scheduler/scheduler-popup/scheduler-popup-form/scheduler-popup-form-date.sfc';
-import { SchedulerPopupFormTitleSFC } from '@core/features/scheduler/scheduler-popup/scheduler-popup-form/scheduler-popup-form-title.sfc';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ViewEncapsulation,
+} from '@angular/core';
+import {
+  SchedulerPopupFormColorPickerSFC,
+  SchedulerPopupFormDateSFC,
+  SchedulerPopupFormTitleSFC,
+} from '@core/features/scheduler/scheduler-popup/scheduler-popup-form/index';
 
 @Component({
   selector: 'app-scheduler-popup-form',

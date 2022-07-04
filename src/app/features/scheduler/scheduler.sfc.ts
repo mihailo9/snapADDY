@@ -10,11 +10,7 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule, Routes } from '@angular/router';
 import { MbscModule } from '@mobiscroll/angular';
 
-import {
-  setOptions,
-  MbscCalendarEvent,
-  MbscResource,
-} from '@mobiscroll/angular';
+import { setOptions } from '@mobiscroll/angular';
 
 import {
   RoomheaderItemSFC,
@@ -22,10 +18,14 @@ import {
 } from '@features/scheduler/scheduler-header-templates/index';
 import { SchedulerStore } from '@core/features/scheduler/data/scheduler.store';
 import { FromInjector } from '@core/util/from-injector';
-import { SchedulerEventPopupSFC } from '@core/features/scheduler/scheduler-popup/scheduler-event-popup.sfc';
-import { SchedulerOptionsService } from '@core/features/scheduler/services/scheduler-options.service';
-import { SchedulerPopupFormService } from '@core/features/scheduler/services/scheduler-popup-form.service';
-import { SchedulerColorPopupSFC } from '@core/features/scheduler/scheduler-popup/scheduler-color-popup.sfc';
+import {
+  SchedulerEventPopupSFC,
+  SchedulerColorPopupSFC,
+} from '@core/features/scheduler/scheduler-popup/index';
+import {
+  SchedulerOptionsService,
+  SchedulerPopupFormService,
+} from '@core/features/scheduler/services/index';
 
 setOptions({
   theme: 'ios',
@@ -60,7 +60,9 @@ setOptions({
         <app-day-header-item [day]="day"></app-day-header-item>
       </ng-template>
     </mbsc-eventcalendar>
-    <app-scheduler-event-popup [events]="vm?.events"></app-scheduler-event-popup>
+    <app-scheduler-event-popup
+      [events]="vm?.events"
+    ></app-scheduler-event-popup>
     <app-scheduler-color-popup></app-scheduler-color-popup>
   </ng-container>`,
 })
@@ -96,7 +98,7 @@ const routes: Routes = [
     RoomheaderItemSFC,
     DayheaderItemSFC,
     SchedulerEventPopupSFC,
-    SchedulerColorPopupSFC
+    SchedulerColorPopupSFC,
   ],
   declarations: [SchedulerSFC],
 })
