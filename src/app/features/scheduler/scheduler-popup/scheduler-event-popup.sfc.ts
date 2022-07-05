@@ -51,7 +51,7 @@ import {
       [buttons]="schedulerPopupButtonsService?.popupButtons"
       #popup
     >
-      <app-scheduler-popup-form></app-scheduler-popup-form>
+      <app-scheduler-popup-form [form]="schedulerPopupFormService.form"></app-scheduler-popup-form>
       <div *ngIf="isEdit" class="mbsc-button-group">
         <app-scheduler-popup-form-delete-btn
           (click$)="onDeleteClick()"
@@ -151,13 +151,20 @@ export class SchedulerEventPopupSFC implements OnInit {
   // }
 
   loadPopupForm({ title, start, end }: MbscCalendarEvent): void {
-    this.schedulerPopupFormService.popupEventTitle = title;
-    this.schedulerPopupFormService.popupEventDates = [start, end];
+    const form = {
+      popupEventTitle: title,
+      popupEventDates: [start, end],
+    };
+    this.schedulerPopupFormService.form = {
+      ...this.schedulerPopupFormService.form,
+      ...form,
+    };
   }
   saveEvent(): void {
-    this.tempEvent.title = this.schedulerPopupFormService.popupEventTitle;
-    this.tempEvent.start = this.schedulerPopupFormService.popupEventDates[0];
-    this.tempEvent.end = this.schedulerPopupFormService.popupEventDates[1];
+    this.tempEvent.title = this.schedulerPopupFormService.form.popupEventTitle;
+    this.tempEvent.start =
+      this.schedulerPopupFormService.form.popupEventDates[0];
+    this.tempEvent.end = this.schedulerPopupFormService.form.popupEventDates[1];
     if (this.isEdit) {
       // update the event in the list
       // this.events = [...this.events];
@@ -172,8 +179,12 @@ export class SchedulerEventPopupSFC implements OnInit {
       // ...
     }
     // navigate the calendar
-    this.schedulerPopupFormService.calendarSelectedDate =
-      this.schedulerPopupFormService.popupEventDates[0];
+    this.schedulerPopupFormService.form = {
+      ...this.schedulerPopupFormService.form,
+      calendarSelectedDate:
+        this.schedulerPopupFormService.form.popupEventDates[0],
+    };
+
     // this.calendarSelectedDate = this.popupEventDates[0];
     // close the popup
     this.popup.close();

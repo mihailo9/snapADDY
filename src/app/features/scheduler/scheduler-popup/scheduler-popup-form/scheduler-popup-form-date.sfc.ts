@@ -1,12 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  Input,
   ViewEncapsulation,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   SchedulerPopupDatepickerService,
-  SchedulerPopupFormService,
 } from '@core/features/scheduler/services';
 
 import { FromInjector } from '@core/util/from-injector';
@@ -19,7 +19,7 @@ import { MbscModule } from '@mobiscroll/angular';
   encapsulation: ViewEncapsulation.None,
   template: ` <div class="mbsc-form-group">
     <mbsc-datepicker
-      [(ngModel)]="schedulerPopupFormService.popupEventDates"
+      [(ngModel)]="dates"
       [options]="schedulerPopupDatepickerService.datePickerOptions"
       [controls]="schedulerPopupDatepickerService.datetimePickerControls"
       [startInput]="startInput"
@@ -31,9 +31,7 @@ import { MbscModule } from '@mobiscroll/angular';
   imports: [FormsModule, MbscModule],
 })
 export class SchedulerPopupFormDateSFC {
-  protected readonly schedulerPopupFormService = this.fromInjector.get(
-    SchedulerPopupFormService
-  );
+  @Input() dates: any[];
 
   protected readonly schedulerPopupDatepickerService = this.fromInjector.get(
     SchedulerPopupDatepickerService

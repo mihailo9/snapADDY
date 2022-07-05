@@ -1,11 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  Input,
   ViewEncapsulation,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { SchedulerPopupFormService } from '@core/features/scheduler/services';
-import { FromInjector } from '@core/util/from-injector';
 import { MbscModule } from '@mobiscroll/angular';
 
 @Component({
@@ -14,16 +13,10 @@ import { MbscModule } from '@mobiscroll/angular';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: ` <div class="mbsc-form-group">
-    <mbsc-input
-      label="Title"
-      [(ngModel)]="schedulerPopupFormService.popupEventTitle"
-    ></mbsc-input>
+    <mbsc-input label="Title" [(ngModel)]="title"></mbsc-input>
   </div>`,
   imports: [FormsModule, MbscModule],
 })
 export class SchedulerPopupFormTitleSFC {
-  protected readonly schedulerPopupFormService = this.fromInjector.get(
-    SchedulerPopupFormService
-  );
-  constructor(private readonly fromInjector: FromInjector) {}
+  @Input() title: string;
 }

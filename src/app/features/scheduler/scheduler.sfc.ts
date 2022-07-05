@@ -40,7 +40,7 @@ import { DispatchEventType } from '@core/models/IDispatchedEvent';
       [resourceTemplate]="resourceTemp"
       [dayTemplate]="dayTemp"
       [options]="schedulerOptionsService?.calendarOptions"
-      [(selectedDate)]="schedulerPopupFormService.calendarSelectedDate"
+      [(selectedDate)]="schedulerPopupFormService.form.calendarSelectedDate"
     >
       <ng-template #resourceTemp let-room>
         <app-room-header-item [room]="room"></app-room-header-item>
