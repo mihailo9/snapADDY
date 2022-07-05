@@ -5,11 +5,13 @@ import {
   Input,
   ViewEncapsulation,
 } from '@angular/core';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   SchedulerPopupFormDateSFC,
   SchedulerPopupFormTitleSFC,
 } from '@core/features/scheduler/scheduler-popup/scheduler-popup-form';
-import { IPopupForm } from '@core/models/IPopupForm';
+
+import { MbscModule } from '@mobiscroll/angular';
 
 @Component({
   selector: 'app-scheduler-popup-form',
@@ -17,11 +19,22 @@ import { IPopupForm } from '@core/models/IPopupForm';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <app-scheduler-popup-form-title [title]="form.popupEventTitle"></app-scheduler-popup-form-title>
-    <app-scheduler-popup-form-date [dates]="form.popupEventDates"></app-scheduler-popup-form-date>
+    <ng-container [formGroup]="form">
+      <app-scheduler-popup-form-title
+        [form]="form"
+      ></app-scheduler-popup-form-title>
+      <app-scheduler-popup-form-date
+        [form]="form"
+      ></app-scheduler-popup-form-date>
+    </ng-container>
   `,
-  imports: [SchedulerPopupFormTitleSFC, SchedulerPopupFormDateSFC],
+  imports: [
+    ReactiveFormsModule,
+    SchedulerPopupFormTitleSFC,
+    SchedulerPopupFormDateSFC,
+    MbscModule,
+  ],
 })
 export class SchedulerPopupFormSFC {
-  @Input() form: IPopupForm;
+  @Input() form: FormGroup;
 }

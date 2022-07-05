@@ -17,6 +17,7 @@ import { SchedulerStore } from '@core/features/scheduler/store/scheduler.store';
 import { FromInjector } from '@core/util/from-injector';
 import { SchedulerEventPopupSFC } from '@core/features/scheduler/scheduler-popup';
 import {
+  SchedulerDispatchService,
   SchedulerOptionsService,
   SchedulerPopupFormService,
 } from '@core/features/scheduler/services';
@@ -40,7 +41,8 @@ import { DispatchEventType } from '@core/models/IDispatchedEvent';
       [resourceTemplate]="resourceTemp"
       [dayTemplate]="dayTemp"
       [options]="schedulerOptionsService?.calendarOptions"
-      [(selectedDate)]="schedulerPopupFormService.form.calendarSelectedDate"
+      [selectedDate]="schedulerPopupFormService.getControlValue('calendarSelectedDate')"
+      (selectedDateChange)="schedulerPopupFormService.patchForm({calendarSelectedDate: $event})"
     >
       <ng-template #resourceTemp let-room>
         <app-room-header-item [room]="room"></app-room-header-item>
@@ -53,7 +55,7 @@ import { DispatchEventType } from '@core/models/IDispatchedEvent';
 
     <app-scheduler-event-popup
       [events]="vm?.events"
-      [dispatchedEvent]="schedulerOptionsService.dispatch$ | async"
+      [dispatchedEvent]="schedulerDispatchService.dispatch$ | async"
       (updateEvents$)="updateAppointments($event)"
     ></app-scheduler-event-popup>
   </ng-container>`,
@@ -79,6 +81,10 @@ export class SchedulerSFC {
     SchedulerOptionsService
   );
 
+  protected readonly schedulerDispatchService = this.fromInjector.get(
+    SchedulerDispatchService
+  );
+
   protected readonly schedulerPopupFormService = this.fromInjector.get(
     SchedulerPopupFormService
   );
@@ -86,6 +92,7 @@ export class SchedulerSFC {
   constructor(private readonly fromInjector: FromInjector) {}
 
   protected updateAppointments(events: MbscCalendarEvent[]) {
+    console.log(events);
     const appointments = events.map((evt) => mapEventToAppointment(evt));
     this.appStore.updateAppointments(appointments);
   }

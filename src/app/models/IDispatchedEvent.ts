@@ -27,4 +27,7 @@ export enum DispatchEventType {
   updated = 'updated',
   create = 'create',
   update = 'update',
+  add = 'add',
+  edit = 'edit',
+  cancel = 'cancel'
 }

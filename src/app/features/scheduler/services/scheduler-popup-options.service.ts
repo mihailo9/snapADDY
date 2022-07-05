@@ -1,23 +1,26 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/member-ordering */
 import { Injectable } from '@angular/core';
+import { SchedulerDispatchService } from '@core/features/scheduler/services';
+import { DispatchEventType } from '@core/models';
+import { FromInjector } from '@core/util/from-injector';
 import { MbscPopupOptions } from '@mobiscroll/angular';
-import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SchedulerPopupOptionsService {
-  private readonly popupClose: Subject<void> = new Subject();
-
-  readonly popupClose$ = this.popupClose.asObservable();
+  private readonly schedulerDispatchService = this.fromInjector.get(
+    SchedulerDispatchService
+  );
 
   popupOptions: MbscPopupOptions = {
     display: 'bottom',
     contentPadding: false,
     fullScreen: true,
     onClose: () => {
-      this.popupClose.next();
+      const payload = { type: DispatchEventType.cancel, event: null };
+      this.schedulerDispatchService.eventDispatched(payload);
     },
     responsive: {
       medium: {
@@ -28,6 +31,8 @@ export class SchedulerPopupOptionsService {
       },
     },
   };
+
+  constructor(private readonly fromInjector: FromInjector) {}
 
   getPopupOptions(): MbscPopupOptions {
     return this.popupOptions;

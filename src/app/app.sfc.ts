@@ -4,7 +4,7 @@ import {
   OnInit,
   ViewEncapsulation,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { MbscModule } from '@mobiscroll/angular';
 import { NgModule } from '@angular/core';
@@ -66,6 +66,7 @@ const routes: Routes = [
   declarations: [AppSFC],
   imports: [
     FormsModule,
+    ReactiveFormsModule,
     MbscModule,
     BrowserModule,
     IonicModule.forRoot(),

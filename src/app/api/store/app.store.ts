@@ -70,6 +70,7 @@ export class AppStore extends Store<State> {
   }
 
   updateAppointments(appointments: Appointment[]) {
+    console.log('APPOINTMENTS', appointments);
     this.updateStateProp('appointments', appointments);
   }
 

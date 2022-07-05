@@ -1,19 +1,25 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/member-ordering */
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { SchedulerDispatchService } from '@core/features/scheduler/services';
+import { DispatchEventType,  } from '@core/models';
+import { FromInjector } from '@core/util/from-injector';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SchedulerPopupButtonsService {
+  private readonly schedulerDispatchService = this.fromInjector.get(
+    SchedulerDispatchService
+  );
   popupButtons: any = [];
 
   popupAddButtons = [
     'cancel',
     {
       handler: () => {
-        this._buttonClick$.next();
+        const payload = {type: DispatchEventType.add, event: null };
+        this.schedulerDispatchService.eventDispatched(payload);
       },
       keyCode: 'enter',
       text: 'Add',
@@ -24,17 +30,14 @@ export class SchedulerPopupButtonsService {
     'cancel',
     {
       handler: () => {
-        this._buttonClick$.next();
+        const payload = {type: DispatchEventType.edit, event: null };
+        this.schedulerDispatchService.eventDispatched(payload);
       },
       keyCode: 'enter',
       text: 'Save',
       cssClass: 'mbsc-popup-button-primary',
     },
   ];
-
-  private readonly _buttonClick$: Subject<void> = new Subject();
-
-  buttonClick$ = this._buttonClick$.asObservable();
 
   getPopupButtons(): any[] {
     return this.popupButtons;
@@ -59,4 +62,6 @@ export class SchedulerPopupButtonsService {
   setPopupEdditButtons(buttons) {
     this.popupEditButtons = [...buttons];
   }
+
+  constructor(private readonly fromInjector: FromInjector) {}
 }

@@ -4,7 +4,7 @@ import {
   Input,
   ViewEncapsulation,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MbscModule } from '@mobiscroll/angular';
 
 @Component({
@@ -13,10 +13,12 @@ import { MbscModule } from '@mobiscroll/angular';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: ` <div class="mbsc-form-group">
-    <mbsc-input label="Title" [(ngModel)]="title"></mbsc-input>
+    <ng-container [formGroup]="form">
+      <mbsc-input label="Title" formControlName="popupEventTitle"></mbsc-input>
+    </ng-container>
   </div>`,
-  imports: [FormsModule, MbscModule],
+  imports: [MbscModule, ReactiveFormsModule],
 })
 export class SchedulerPopupFormTitleSFC {
-  @Input() title: string;
+  @Input() form: FormGroup;
 }

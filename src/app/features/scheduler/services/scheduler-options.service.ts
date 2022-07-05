@@ -1,58 +1,14 @@
 /* eslint-disable @typescript-eslint/member-ordering */
 import { Injectable } from '@angular/core';
-import { DispatchEventType, IDispatchedEvent } from '@core/models';
-import {
-  MbscEventcalendarOptions,
-  MbscEventClickEvent,
-  MbscEventCreatedEvent,
-  MbscEventCreateEvent,
-  MbscEventDeletedEvent,
-  MbscEventUpdatedEvent,
-  MbscEventUpdateEvent,
-} from '@mobiscroll/angular';
-import { merge, Subject } from 'rxjs';
+import { SchedulerDispatchService } from '@core/features/scheduler/services';
+import { DispatchEventType } from '@core/models';
+import { FromInjector } from '@core/util/from-injector';
+import { MbscEventcalendarOptions } from '@mobiscroll/angular';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SchedulerOptionsService {
-  private readonly eventClick: Subject<MbscEventClickEvent> = new Subject();
-
-  private readonly eventCreated: Subject<MbscEventCreatedEvent> = new Subject();
-
-  private readonly eventDeleted: Subject<MbscEventDeletedEvent> = new Subject();
-
-  private readonly eventUpdated: Subject<MbscEventUpdatedEvent> = new Subject();
-
-  private readonly eventCreate: Subject<MbscEventCreateEvent> = new Subject();
-
-  private readonly eventUpdate: Subject<MbscEventUpdateEvent> = new Subject();
-
-  readonly eventClick$ = this.eventClick.asObservable();
-
-  readonly eventCreated$ = this.eventCreated.asObservable();
-
-  readonly eventDeleted$ = this.eventDeleted.asObservable();
-
-  readonly eventUpdated$ = this.eventUpdated.asObservable();
-
-  readonly eventCreate$ = this.eventCreate.asObservable();
-
-  readonly eventUpdate$ = this.eventUpdate.asObservable();
-
-  readonly mergedEvents$ = merge(
-    this.eventClick$,
-    this.eventCreate$,
-    this.eventCreated$,
-    this.eventDeleted$,
-    this.eventUpdate$,
-    this.eventUpdated$
-  );
-
-  private readonly dispatch: Subject<IDispatchedEvent> = new Subject();
-
-  readonly dispatch$ = this.dispatch.asObservable();
-
   calendarOptions: MbscEventcalendarOptions = {
     clickToCreate: 'double',
     dragToCreate: true,
@@ -62,14 +18,14 @@ export class SchedulerOptionsService {
       schedule: { type: 'week' },
     },
     onEventClick: (args) => {
-      this.eventDispatched({
+      this.schedulerDispatchService.eventDispatched({
         type: DispatchEventType.click,
         event: args,
       });
     },
     onEventCreated: (args) => {
       setTimeout(() => {
-        this.eventDispatched({
+        this.schedulerDispatchService.eventDispatched({
           type: DispatchEventType.created,
           event: args,
         });
@@ -77,14 +33,14 @@ export class SchedulerOptionsService {
     },
     onEventDeleted: (args) => {
       setTimeout(() => {
-        this.eventDispatched({
+        this.schedulerDispatchService.eventDispatched({
           type: DispatchEventType.deleted,
           event: args,
         });
       });
     },
     onEventUpdated: (args) => {
-      this.eventDispatched({
+      this.schedulerDispatchService.eventDispatched({
         type: DispatchEventType.updated,
         event: args,
       });
@@ -93,7 +49,7 @@ export class SchedulerOptionsService {
       if (this.hasOverlap(args, inst)) {
         return false;
       }
-      this.eventDispatched({
+      this.schedulerDispatchService.eventDispatched({
         type: DispatchEventType.create,
         event: args,
       });
@@ -102,16 +58,18 @@ export class SchedulerOptionsService {
       if (this.hasOverlap(args, inst)) {
         return false;
       }
-      this.eventDispatched({
+      this.schedulerDispatchService.eventDispatched({
         type: DispatchEventType.update,
         event: args,
       });
     },
   };
 
-  eventDispatched(event: IDispatchedEvent) {
-    this.dispatch.next(event);
-  }
+  private readonly schedulerDispatchService = this.fromInjector.get(
+    SchedulerDispatchService
+  );
+
+  constructor(private readonly fromInjector: FromInjector) {}
 
   private hasOverlap(args, inst) {
     const ev = args.event;
