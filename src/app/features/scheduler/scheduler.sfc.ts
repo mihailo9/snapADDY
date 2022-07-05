@@ -15,10 +15,7 @@ import {
 } from '@features/scheduler/scheduler-header-templates';
 import { SchedulerStore } from '@core/features/scheduler/store/scheduler.store';
 import { FromInjector } from '@core/util/from-injector';
-import {
-  SchedulerEventPopupSFC,
-  SchedulerColorPopupSFC,
-} from '@core/features/scheduler/scheduler-popup';
+import { SchedulerEventPopupSFC } from '@core/features/scheduler/scheduler-popup';
 import {
   SchedulerOptionsService,
   SchedulerPopupFormService,
@@ -59,8 +56,6 @@ import { DispatchEventType } from '@core/models/IDispatchedEvent';
       [dispatchedEvent]="schedulerOptionsService.dispatch$ | async"
       (updateEvents$)="updateAppointments($event)"
     ></app-scheduler-event-popup>
-
-    <app-scheduler-color-popup></app-scheduler-color-popup>
   </ng-container>`,
 })
 export class SchedulerSFC {
@@ -112,7 +107,6 @@ const routes: Routes = [
     RoomheaderItemSFC,
     DayheaderItemSFC,
     SchedulerEventPopupSFC,
-    SchedulerColorPopupSFC,
   ],
   declarations: [SchedulerSFC],
 })

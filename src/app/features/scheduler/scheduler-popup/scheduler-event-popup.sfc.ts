@@ -21,7 +21,6 @@ import {
   SchedulerPopupOptionsService,
   SchedulerOptionsService,
   SchedulerPopupButtonsService,
-  SchedulerPopupColorService,
   SchedulerPopupFormService,
 } from '@core/features/scheduler/services';
 import {
@@ -119,10 +118,6 @@ export class SchedulerEventPopupSFC implements OnInit {
     SchedulerPopupButtonsService
   );
 
-  protected readonly schedulerPopupColorService = this.fromInjector.get(
-    SchedulerPopupColorService
-  );
-
   protected readonly schedulerPopupFormService = this.fromInjector.get(
     SchedulerPopupFormService
   );
@@ -155,16 +150,14 @@ export class SchedulerEventPopupSFC implements OnInit {
 
   // }
 
-  loadPopupForm({ title, start, end, color }: MbscCalendarEvent): void {
+  loadPopupForm({ title, start, end }: MbscCalendarEvent): void {
     this.schedulerPopupFormService.popupEventTitle = title;
     this.schedulerPopupFormService.popupEventDates = [start, end];
-    this.schedulerPopupColorService.selectedColor = color || '';
   }
   saveEvent(): void {
     this.tempEvent.title = this.schedulerPopupFormService.popupEventTitle;
     this.tempEvent.start = this.schedulerPopupFormService.popupEventDates[0];
     this.tempEvent.end = this.schedulerPopupFormService.popupEventDates[1];
-    this.tempEvent.color = this.schedulerPopupColorService.selectedColor;
     if (this.isEdit) {
       // update the event in the list
       // this.events = [...this.events];

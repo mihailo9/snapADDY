@@ -5,7 +5,6 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import {
-  SchedulerPopupFormColorPickerSFC,
   SchedulerPopupFormDateSFC,
   SchedulerPopupFormTitleSFC,
 } from '@core/features/scheduler/scheduler-popup/scheduler-popup-form';
@@ -18,12 +17,7 @@ import {
   template: `
     <app-scheduler-popup-form-title></app-scheduler-popup-form-title>
     <app-scheduler-popup-form-date></app-scheduler-popup-form-date>
-    <app-scheduler-popup-form-color-picker></app-scheduler-popup-form-color-picker>
   `,
-  imports: [
-    SchedulerPopupFormTitleSFC,
-    SchedulerPopupFormDateSFC,
-    SchedulerPopupFormColorPickerSFC,
-  ],
+  imports: [SchedulerPopupFormTitleSFC, SchedulerPopupFormDateSFC],
 })
 export class SchedulerPopupFormSFC {}
