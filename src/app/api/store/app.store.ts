@@ -21,6 +21,14 @@ export interface State {
   loading: boolean;
 }
 
+export enum AppState {
+  appState = 'appState',
+  users = 'users',
+  loading = 'loading',
+  rooms = 'rooms',
+  appointments = 'appointments'
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -32,14 +40,14 @@ export class AppStore extends Store<State> {
     loading: false,
   };
 
-  users$: Observable<User[]> = this.selectPropFromState('users');
+  users$: Observable<User[]> = this.selectPropFromState(AppState.users);
 
-  rooms$: Observable<Room[]> = this.selectPropFromState('rooms');
+  rooms$: Observable<Room[]> = this.selectPropFromState(AppState.rooms);
 
-  loading$: Observable<boolean> = this.selectPropFromState('loading');
+  loading$: Observable<boolean> = this.selectPropFromState(AppState.loading);
 
   appointments$: Observable<Appointment[]> =
-    this.selectPropFromState('appointments');
+    this.selectPropFromState(AppState.appointments);
 
   vm$: Observable<State> = this.initVM();
 
@@ -70,16 +78,16 @@ export class AppStore extends Store<State> {
   }
 
   updateAppointments(appointments: Appointment[]) {
-    let appState = JSON.parse(this.localstorageService.getData('appState'));
+    let appState = JSON.parse(this.localstorageService.getData(AppState.appState));
 
     appState = {
       ...appState,
       appointments,
     };
 
-    this.localstorageService.setData(appState, 'appState');
+    this.localstorageService.setData(appState, AppState.appState);
 
-    this.updateStateProp('appointments', appointments);
+    this.updateStateProp(AppState.appointments, appointments);
   }
 
   protected initVM() {
@@ -90,7 +98,7 @@ export class AppStore extends Store<State> {
         users,
         rooms,
       };
-      this.localstorageService.setData(state, 'appState');
+      this.localstorageService.setData(state, AppState.appState);
 
       return state;
     };

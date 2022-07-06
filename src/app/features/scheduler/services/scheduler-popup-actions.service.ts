@@ -6,7 +6,7 @@ import {
   SchedulerPopupButtonsService,
   SchedulerPopupFormService,
 } from '@core/features/scheduler/services';
-import { DispatchEventType } from '@core/models';
+import { DispatchEventType, PopupFormEnum } from '@core/models';
 import { HasOverlapEventsService } from '@core/util/has-overlap-events.service';
 
 import {
@@ -45,6 +45,8 @@ export class SchedulerPopupActionsService {
 
   popupAnchor: HTMLElement | undefined;
 
+  protected readonly popupFormEnum = PopupFormEnum;
+
   constructor(
     private readonly schedulerPopupButtonsService: SchedulerPopupButtonsService,
     private readonly schedulerPopupFormService: SchedulerPopupFormService,
@@ -53,7 +55,7 @@ export class SchedulerPopupActionsService {
   ) {}
 
   actions(type: DispatchEventType, payload: IEventPayload) {
-    console.log(type)
+    console.log(type);
     const actions = {
       [DispatchEventType.add]: () => {
         this.saveEvent(payload);
@@ -97,12 +99,12 @@ export class SchedulerPopupActionsService {
     const mockEventId = (event) =>
       this.isEdit ? event.id : (events[events.length - 1].id as number) + 1;
     const startDate =
-      this.schedulerPopupFormService.getControlValue('popupEventDates')[0];
+      this.schedulerPopupFormService.getControlValue(this.popupFormEnum.popupEventDates)[0];
     const endDate =
-      this.schedulerPopupFormService.getControlValue('popupEventDates')[1];
+      this.schedulerPopupFormService.getControlValue(this.popupFormEnum.popupEventDates)[1];
     this.tempEvent = {
       ...this.tempEvent,
-      title: this.schedulerPopupFormService.getControlValue('popupEventTitle'),
+      title: this.schedulerPopupFormService.getControlValue(this.popupFormEnum.popupEventTitle),
       start: startDate,
       end: endDate,
       id: mockEventId(this.tempEvent),
@@ -185,9 +187,9 @@ export class SchedulerPopupActionsService {
 
   private onEventEdit({ events, popup, callback }: Partial<IEventPayload>) {
     const startDate =
-      this.schedulerPopupFormService.getControlValue('popupEventDates')[0];
+      this.schedulerPopupFormService.getControlValue(this.popupFormEnum.popupEventDates)[0];
     const endDate =
-      this.schedulerPopupFormService.getControlValue('popupEventDates')[1];
+      this.schedulerPopupFormService.getControlValue(this.popupFormEnum.popupEventDates)[1];
     this.tempEvent = {
       ...this.tempEvent,
       start: startDate,

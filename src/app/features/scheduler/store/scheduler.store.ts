@@ -8,19 +8,27 @@ import {
   MbscResource,
 } from '@mobiscroll/angular';
 import { Observable } from 'rxjs';
-import { Appointment, Room } from '@models/index';
-
+import { Room } from '@models/index';
 import { Store } from '@core/base/store.base';
-import { FromInjector } from '@core/util/from-injector';
-import { LocalstorageService } from '@core/util/localstorage.service';
-import { mapAppointmentsToEvents } from '@core/util/map-appointments-to-events';
-import { mapRoomsToResources } from '@core/util/map-rooms-to-resources';
+import {
+  LocalstorageService,
+  mapRoomsToResources,
+  FromInjector,
+} from '@core/util';
 
 export interface State {
   events: MbscCalendarEvent[];
   resources: MbscResource[];
   view: MbscEventcalendarView;
   loading: boolean;
+}
+
+export enum SchedulerState {
+  schedulerState = 'schedulerState',
+  events = 'events',
+  view = 'view',
+  loading = 'loading',
+  resources = 'resources',
 }
 
 @Injectable({
@@ -34,14 +42,21 @@ export class SchedulerStore extends Store<State> {
     loading: false,
   };
 
-  events$: Observable<MbscCalendarEvent[]> = this.selectPropFromState('events');
+  events$: Observable<MbscCalendarEvent[]> = this.selectPropFromState(
+    SchedulerState.events
+  );
 
-  resources$: Observable<MbscResource[]> =
-    this.selectPropFromState('resources');
+  resources$: Observable<MbscResource[]> = this.selectPropFromState(
+    SchedulerState.resources
+  );
 
-  view$: Observable<MbscEventcalendarView[]> = this.selectPropFromState('view');
+  view$: Observable<MbscEventcalendarView[]> = this.selectPropFromState(
+    SchedulerState.view
+  );
 
-  loading$: Observable<boolean> = this.selectPropFromState('loading');
+  loading$: Observable<boolean> = this.selectPropFromState(
+    SchedulerState.loading
+  );
 
   vm$: Observable<State> = this.initVM();
 
@@ -55,7 +70,25 @@ export class SchedulerStore extends Store<State> {
   updateResurcesFromRooms(rooms: Room[]) {
     const resources = mapRoomsToResources(rooms);
 
-    this.updateStateProp('resources', resources);
+    this.updateStateProp(SchedulerState.resources, resources);
+  }
+
+  updateEvents(events: MbscCalendarEvent[]) {
+    let schedulerState = JSON.parse(
+      this.localstorageService.getData(SchedulerState.schedulerState)
+    );
+
+    schedulerState = {
+      ...schedulerState,
+      events,
+    };
+
+    this.localstorageService.setData(
+      schedulerState,
+      SchedulerState.schedulerState
+    );
+
+    this.updateStateProp(SchedulerState.events, events);
   }
 
   protected initVM(): Observable<State> {
@@ -66,7 +99,7 @@ export class SchedulerStore extends Store<State> {
         view,
         loading,
       };
-      this.localstorageService.setData(state, 'schedulerStore');
+      this.localstorageService.setData(state, SchedulerState.schedulerState);
 
       return state;
     };

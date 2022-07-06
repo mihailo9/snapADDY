@@ -22,9 +22,10 @@ import {
   SchedulerPopupFormService,
 } from '@core/features/scheduler/services';
 import { AppStore } from '@core/api/store';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { mapAppointmentsToEvents, mapEventToAppointment } from '@core/util';
 import { combineLatest } from 'rxjs';
+import { PopupFormEnum } from '@core/models';
 
 import { DispatchEventType } from '@core/models';
 
@@ -42,7 +43,9 @@ import { DispatchEventType } from '@core/models';
       [dayTemplate]="dayTemp"
       [options]="schedulerOptionsService?.calendarOptions"
       [selectedDate]="
-        schedulerPopupFormService.getControlValue('calendarSelectedDate')
+        schedulerPopupFormService.getControlValue(
+          popupFormEnum.calendarSelectedDate
+        )
       "
       (selectedDateChange)="
         schedulerPopupFormService.patchForm({ calendarSelectedDate: $event })
@@ -78,6 +81,8 @@ export class SchedulerSFC {
       events: mapAppointmentsToEvents(appointments),
     }))
   );
+
+  protected readonly popupFormEnum = PopupFormEnum;
 
   protected readonly dispatchEventTypeEnum = DispatchEventType;
 
