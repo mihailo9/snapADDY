@@ -70,7 +70,15 @@ export class AppStore extends Store<State> {
   }
 
   updateAppointments(appointments: Appointment[]) {
-    console.log('APPOINTMENTS', appointments);
+    let appState = JSON.parse(this.localstorageService.getData('appState'));
+
+    appState = {
+      ...appState,
+      appointments,
+    };
+
+    this.localstorageService.setData(appState, 'appState');
+
     this.updateStateProp('appointments', appointments);
   }
 

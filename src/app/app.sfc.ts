@@ -15,7 +15,7 @@ import {
   RouterModule,
   Routes,
 } from '@angular/router';
-import { FromInjector } from '@core/util/from-injector';
+import { FromInjector } from '@core/util';
 import { AppStore, State } from '@core/api/store';
 import { SchedulerSFC } from '@core/features/scheduler/scheduler.sfc';
 

@@ -3,8 +3,8 @@ export class Appointment {
     public id: number | string,
     public title: string,
     public roomId: number,
-    public startDate: string,
-    public endDate: string,
+    public startDate: string | Date,
+    public endDate: string | Date,
     public userId: number
   ) {}
 }

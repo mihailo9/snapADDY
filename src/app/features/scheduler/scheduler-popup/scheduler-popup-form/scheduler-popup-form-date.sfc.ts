@@ -7,7 +7,6 @@ import {
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SchedulerPopupDatepickerService } from '@core/features/scheduler/services';
 
-import { FromInjector } from '@core/util/from-injector';
 import { MbscModule } from '@mobiscroll/angular';
 
 @Component({
@@ -31,8 +30,7 @@ import { MbscModule } from '@mobiscroll/angular';
 export class SchedulerPopupFormDateSFC {
   @Input() form: FormGroup;
 
-  protected readonly schedulerPopupDatepickerService = this.fromInjector.get(
-    SchedulerPopupDatepickerService
-  );
-  constructor(private readonly fromInjector: FromInjector) {}
+  constructor(
+    protected readonly schedulerPopupDatepickerService: SchedulerPopupDatepickerService
+  ) {}
 }

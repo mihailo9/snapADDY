@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { SchedulerDispatchService } from '@core/features/scheduler/services';
 import { DispatchEventType } from '@core/models';
-import { FromInjector } from '@core/util/from-injector';
+import { HasOverlapEventsService, NotifierService } from '@core/util';
 import { MbscEventcalendarOptions } from '@mobiscroll/angular';
 
 @Injectable({
@@ -46,37 +46,21 @@ export class SchedulerOptionsService {
       });
     },
     onEventCreate: (args, inst) => {
-      if (this.hasOverlap(args, inst)) {
+      if (this.hasOverlapEventsService.hasOverlap(args.event, inst)) {
         return false;
       }
-      this.schedulerDispatchService.eventDispatched({
-        type: DispatchEventType.create,
-        event: args,
-      });
     },
     onEventUpdate: (args, inst) => {
-      if (this.hasOverlap(args, inst)) {
+      if (this.hasOverlapEventsService.hasOverlap(args.event, inst)) {
+        this.notifierService.snackbar('Overlaping events!');
         return false;
       }
-      this.schedulerDispatchService.eventDispatched({
-        type: DispatchEventType.update,
-        event: args,
-      });
     },
   };
 
-  private readonly schedulerDispatchService = this.fromInjector.get(
-    SchedulerDispatchService
-  );
-
-  constructor(private readonly fromInjector: FromInjector) {}
-
-  private hasOverlap(args, inst) {
-    const ev = args.event;
-    const events = inst
-      .getEvents(ev.start, ev.end)
-      .filter((e) => e.id !== ev.id);
-
-    return events.length > 0;
-  }
+  constructor(
+    private readonly schedulerDispatchService: SchedulerDispatchService,
+    private readonly notifierService: NotifierService,
+    private readonly hasOverlapEventsService: HasOverlapEventsService
+  ) {}
 }

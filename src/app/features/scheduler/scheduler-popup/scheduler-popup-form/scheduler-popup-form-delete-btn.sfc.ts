@@ -1,11 +1,11 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
-  Output,
   ViewEncapsulation,
 } from '@angular/core';
+import { SchedulerDispatchService } from '@core/features/scheduler/services';
 import { MbscModule } from '@mobiscroll/angular';
+import { DispatchEventType } from '@core/models';
 
 @Component({
   selector: 'app-scheduler-popup-form-delete-btn',
@@ -16,11 +16,20 @@ import { MbscModule } from '@mobiscroll/angular';
     class="mbsc-button-block"
     color="danger"
     variant="outline"
-    (click)="click$.emit()"
+    (click)="
+      schedulerDispatchService.eventDispatched({
+        event: null,
+        type: dispatchEventType.deleted
+      })
+    "
     >Delete event
   </mbsc-button>`,
   imports: [MbscModule],
 })
 export class SchedulerPopupFormDeleteBtnSFC {
-  @Output() protected readonly click$: EventEmitter<void> = new EventEmitter();
+  protected dispatchEventType = DispatchEventType;
+
+  constructor(
+    protected readonly schedulerDispatchService: SchedulerDispatchService
+  ) {}
 }

@@ -3,7 +3,7 @@
 import { Injectable } from '@angular/core';
 import { SchedulerDispatchService } from '@core/features/scheduler/services';
 import { DispatchEventType } from '@core/models';
-import { FromInjector } from '@core/util/from-injector';
+import { FromInjector } from '@core/util';
 import { MbscPopupOptions } from '@mobiscroll/angular';
 
 @Injectable({

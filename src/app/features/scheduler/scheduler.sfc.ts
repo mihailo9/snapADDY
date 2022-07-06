@@ -23,10 +23,10 @@ import {
 } from '@core/features/scheduler/services';
 import { AppStore } from '@core/api/store';
 import { map } from 'rxjs/operators';
-import { mapAppointmentsToEvents } from '@core/util/map-appointments-to-events';
+import { mapAppointmentsToEvents, mapEventToAppointment } from '@core/util';
 import { combineLatest } from 'rxjs';
-import { mapEventToAppointment } from '@core/util/map-event-to-appointment';
-import { DispatchEventType } from '@core/models/IDispatchedEvent';
+
+import { DispatchEventType } from '@core/models';
 
 @Component({
   selector: 'app-scheduler',
@@ -41,8 +41,12 @@ import { DispatchEventType } from '@core/models/IDispatchedEvent';
       [resourceTemplate]="resourceTemp"
       [dayTemplate]="dayTemp"
       [options]="schedulerOptionsService?.calendarOptions"
-      [selectedDate]="schedulerPopupFormService.getControlValue('calendarSelectedDate')"
-      (selectedDateChange)="schedulerPopupFormService.patchForm({calendarSelectedDate: $event})"
+      [selectedDate]="
+        schedulerPopupFormService.getControlValue('calendarSelectedDate')
+      "
+      (selectedDateChange)="
+        schedulerPopupFormService.patchForm({ calendarSelectedDate: $event })
+      "
     >
       <ng-template #resourceTemp let-room>
         <app-room-header-item [room]="room"></app-room-header-item>
@@ -77,22 +81,14 @@ export class SchedulerSFC {
 
   protected readonly dispatchEventTypeEnum = DispatchEventType;
 
-  protected readonly schedulerOptionsService = this.fromInjector.get(
-    SchedulerOptionsService
-  );
-
-  protected readonly schedulerDispatchService = this.fromInjector.get(
-    SchedulerDispatchService
-  );
-
-  protected readonly schedulerPopupFormService = this.fromInjector.get(
-    SchedulerPopupFormService
-  );
-
-  constructor(private readonly fromInjector: FromInjector) {}
+  constructor(
+    private readonly fromInjector: FromInjector,
+    protected readonly schedulerPopupFormService: SchedulerPopupFormService,
+    protected readonly schedulerDispatchService: SchedulerDispatchService,
+    protected readonly schedulerOptionsService: SchedulerOptionsService
+  ) {}
 
   protected updateAppointments(events: MbscCalendarEvent[]) {
-    console.log(events);
     const appointments = events.map((evt) => mapEventToAppointment(evt));
     this.appStore.updateAppointments(appointments);
   }

@@ -52,20 +52,10 @@ export class SchedulerStore extends Store<State> {
     super(fromInjector);
   }
 
-  updateEvents(events: MbscCalendarEvent[]) {
-    this.updateStateProp('events', events);
-  }
-
   updateResurcesFromRooms(rooms: Room[]) {
     const resources = mapRoomsToResources(rooms);
 
     this.updateStateProp('resources', resources);
-  }
-
-  updateEventsFromAppointments(appointments: Appointment[]) {
-    const events = mapAppointmentsToEvents(appointments);
-
-    this.updateStateProp('events', events);
   }
 
   protected initVM(): Observable<State> {
