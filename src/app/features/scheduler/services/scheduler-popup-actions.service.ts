@@ -55,7 +55,6 @@ export class SchedulerPopupActionsService {
   ) {}
 
   actions(type: DispatchEventType, payload: IEventPayload) {
-    console.log(type);
     const actions = {
       [DispatchEventType.add]: () => {
         this.saveEvent(payload);
